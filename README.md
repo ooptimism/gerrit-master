@@ -1,6 +1,6 @@
-# Gerrit master image
+# Gerrit image
 
-Gerrit master image for a Gerrit master
+Gerrit image for a primary Gerrit instance
 
 ## Content
 
