@@ -11,6 +11,10 @@ symlink_config_to_site(){
 # is symlinked to the Gerrit site. This is necessary, because mounting files
 # from secrets/configmaps in Kubernetes make the containing directory read-only.
 symlink_config_to_site
+# need use patchset-created gerrit hook
+mkdir -p /var/gerrit/hooks
+cp /var/tools/patchset-created /var/gerrit/hooks
+chmod +x /var/gerrit/hooks/patchset-created
 
 JAVA_OPTIONS=$(git config --file /var/gerrit/etc/gerrit.config --get-all container.javaOptions)
 java ${JAVA_OPTIONS} -jar /var/gerrit/bin/gerrit.war daemon \

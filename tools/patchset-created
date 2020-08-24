@@ -1,0 +1,26 @@
+#!/bin/ash
+
+REST_USER=gerritadmin
+REST_USER_PASSWORD=123
+
+
+while [ "$1" != "" ]; do
+	case $1 in
+		--change)		CHANGE=$2; shift;;
+		--project)		PROJECT=$2; shift;;
+		--branch)		BRANCH=$2; shift;;
+		--uploader)		UPLOADER=$2; shift;;
+		--commit)		COMMIT=$2; shift;;
+		--patchset)		PATCHSET=$2; shift;;
+	esac
+	shift;
+done
+
+result=$(curl --user $REST_USER:$REST_USER_PASSWORD http://localhost:8080/a/changes/$CHANGE/ | grep "subject" | sed 's/:/\n/' | sed '1d' | sed 's/"//g' | sed -n '/^.*:.*\[[0-9]*\/[0-9]*\].*Feature:.*Test:/p')
+
+if test -z "$result"
+then
+  curl -X POST --user $REST_USER:$REST_USER_PASSWORD -d '{"message":"Commit massage format error!","labels":{"Code-Review": -1}}' --header 'Content-Type:application/json; charset=UTF-8' http://localhost:8080/a/changes/$CHANGE/revisions/current/review
+else
+  curl -X POST --user $REST_USER:$REST_USER_PASSWORD -d '{"message":"Commit massage format OK!","labels":{"Code-Review": +1}}' --header 'Content-Type:application/json; charset=UTF-8' http://localhost:8080/a/changes/$CHANGE/revisions/current/review
+fi
