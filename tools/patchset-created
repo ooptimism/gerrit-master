@@ -16,7 +16,7 @@ while [ "$1" != "" ]; do
 	shift;
 done
 
-result=$(curl --user $REST_USER:$REST_USER_PASSWORD http://localhost:8080/a/changes/$CHANGE/ | grep "subject" | sed 's/:/\n/' | sed '1d' | sed 's/"//g' | sed -n '/^.*:.*\[[0-9]*\/[0-9]*\].*Feature:.*Test:/p')
+result=$(curl --user $REST_USER:$REST_USER_PASSWORD http://localhost:8080/a/changes/$CHANGE/revisions/current/commit | grep "\"message\"" | sed 's/:/\n/' | sed '1d' | sed 's/"//g' | sed -n '/^.*:.*\[[0-9]*\/[0-9]*\]\\n\\nFeature:.*\\n\\nTest:/p')
 
 if test -z "$result"
 then
