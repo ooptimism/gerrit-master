@@ -1,6 +1,6 @@
 #!/bin/ash
 
-REST_USER=gerritadmin
+REST_USER=CommitMsgVerify
 REST_USER_PASSWORD=123
 
 
